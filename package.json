@@ -2,8 +2,9 @@
   "name": "batcave-security",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
+    "dev": "node --watch server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -12,6 +13,7 @@
   "dependencies": {
     "bcrypt": "^6.0.0",
     "better-sqlite3": "^12.10.0",
+    "cors": "^2.8.6",
     "express": "^5.2.1"
   }
 }

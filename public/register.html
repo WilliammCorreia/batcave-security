@@ -1,20 +1,48 @@
-<form id="register-form">
-  <label for="username">Nom d'utilisateur</label>
-  <input
-    type="text"
-    id="username"
-    placeholder="Nom d'utilisateur"
-    required
-  />
-  <label for="password">Mot de passe</label>
-  <input
-    type="password"
-    id="password"
-    placeholder="Mot de passe"
-    required
-  />
-  <button type="submit">S'inscrire</button>
-  <p id="message"></p>
-  <a href="admin-page">Déjà un compte ? Administration</a>
-</form>
-<script src="register.js"></script>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Bat-computer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #212529; color: #fff; padding: 20px; }
+        .arsenal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+    </style>
+    <script src="register.js"></script>
+</head>
+<html>
+<body>
+  <div class="container">
+    <h1>Inscription</h1>
+    <form id="register-form">
+      <div class="mb-3">
+        <label for="username" class="form-label">Nom d'utilisateur</label>
+        <input
+          type="text"
+          class="form-control"
+          id="username"
+          placeholder="Nom d'utilisateur"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Mot de passe</label>
+        <input
+          type="password"
+          class="form-control"
+          id="password"
+          placeholder="Mot de passe"
+          required
+        />
+      </div>
+      <button type="submit" class="btn btn-primary">S'inscrire</button>
+      <p id="message"></p>
+    </form>
+  </div>
+</body>
+</html>

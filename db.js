@@ -10,4 +10,13 @@ db.prepare(`
   )
 `).run();
 
+db.prepare(`
+  CREATE TABLE IF NOT EXISTS reports (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    message TEXT,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+  )
+`).run();
+
 module.exports = db;
