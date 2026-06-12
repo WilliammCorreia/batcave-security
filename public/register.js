@@ -3,7 +3,7 @@ document.getElementById('register-form').onsubmit = async e => {
   const username = document.getElementById('username').value
   const password = document.getElementById('password').value
 
-  const response = await fetch('http://localhost:3000/register', {
+  const response = await fetch('/auth/register', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ username, password })
@@ -11,11 +11,11 @@ document.getElementById('register-form').onsubmit = async e => {
 
   const messageElement = document.getElementById('message')
   if (response.ok) {
-    messageElement.style.color = 'green'
-    messageElement.innerText =
-      "Inscription réussie !"
+    messageElement.style.color = 'lightgreen'
+    messageElement.innerText = 'Inscription réussie ! Redirection...'
+    setTimeout(() => (window.location.href = '/auth/login'), 1000)
   } else {
-    messageElement.style.color = 'red'
-    messageElement.innerText = "Erreur lors de l'inscription."
+    messageElement.style.color = 'salmon'
+    messageElement.innerText = await response.text()
   }
 }
