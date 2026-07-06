@@ -19,7 +19,7 @@ router.get('/', isAuthenticated, (req, res) => {
     path.join(__dirname, '..', 'views', 'bat-computer.html'),
     'utf8'
   )
-  const html = template.replaceAll('{{username}}', escapeHtml(req.session.user.username))
+  const html = template.replaceAll('{{username}}', escapeHtml(req.user.username))
   res.send(html)
 })
 

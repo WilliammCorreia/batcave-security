@@ -1,7 +1,9 @@
 const express = require('express')
 const bcrypt = require('bcrypt')
+const crypto = require('crypto')
 const path = require('path')
 const db = require('../config/db')
+const { activeSessions } = require('../middlewares/sessionStore')
 
 const router = express.Router()
 
@@ -19,23 +21,33 @@ router.post('/login', async (req, res, next) => {
       .send('Identifiants invalides. <a href="/auth/login">Réessayer</a>')
   }
 
-  req.session.regenerate((err) => {
-    if (err) return next(err)
-
-    req.session.user = { username: user.username }
-
-    req.session.save((err) => {
-      if (err) return next(err)
-      res.redirect('/bat-computer')
-    })
+  const sessionId = crypto.randomUUID()
+  activeSessions.set(sessionId, {
+    id: user.id,
+    username: user.username,
+    email: user.email,
+    role: user.role
   })
+
+  const cookieOptions = [
+    `sessionId=${sessionId}`,
+    `HttpOnly`,
+    `SameSite=Strict`,
+    `Max-Age=3600`,
+    `Path=/`
+  ].join('; ')
+
+  res.setHeader('Set-Cookie', cookieOptions)
+  res.redirect('/bat-computer')
 })
 
 router.get('/logout', (req, res) => {
-  req.session.destroy(() => {
-    res.clearCookie('bat_identity')
-    res.redirect('/auth/login')
-  })
+  if (req.sessionId) {
+    activeSessions.delete(req.sessionId)
+  }
+
+  res.setHeader('Set-Cookie', 'sessionId=; HttpOnly; SameSite=Strict; Max-Age=0; Path=/')
+  res.redirect('/auth/login')
 })
 
 router.get('/register', (req, res) => {
