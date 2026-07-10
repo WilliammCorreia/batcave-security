@@ -6,7 +6,9 @@ db.prepare(`
   CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT UNIQUE,
-    password_hash TEXT
+    password_hash TEXT,
+    two_factor_secret TEXT,
+    two_factor_enabled INTEGER DEFAULT 0
   )
 `).run()
 
@@ -19,5 +21,17 @@ db.prepare(`
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
   )
 `).run()
+
+// Migration idempotente : la table users existe déjà (TP précédents) sans les
+// colonnes 2FA. CREATE TABLE IF NOT EXISTS ne les ajoute pas, on le fait donc
+// manuellement via ALTER TABLE si elles manquent.
+const userColumns = db.prepare('PRAGMA table_info(users)').all().map((c) => c.name)
+
+if (!userColumns.includes('two_factor_secret')) {
+  db.prepare('ALTER TABLE users ADD COLUMN two_factor_secret TEXT').run()
+}
+if (!userColumns.includes('two_factor_enabled')) {
+  db.prepare('ALTER TABLE users ADD COLUMN two_factor_enabled INTEGER DEFAULT 0').run()
+}
 
 module.exports = db

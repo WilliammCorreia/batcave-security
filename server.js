@@ -1,6 +1,7 @@
 require('dotenv').config()
 
 const express = require('express')
+const helmet = require('helmet')
 const path = require('path')
 
 const authRouter = require('./routes/auth')
@@ -9,6 +10,7 @@ const checkJWT = require('./middlewares/checkJWT')
 
 const app = express()
 
+app.use(helmet())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(express.static('public'))
@@ -21,7 +23,7 @@ app.get('/dashboard', checkJWT, (req, res) => {
 });
 
 app.get(/.*$/, (req, res) => {
-  res.redirect('/login.html')
+  res.redirect('/auth/login')
 })
 
 const PORT = process.env.PORT || 3000
